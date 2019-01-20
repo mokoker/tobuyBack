@@ -18,15 +18,10 @@ namespace TB.Db.Entities
         public int CategoryId { get; set; }
         [ForeignKey("PosterId")]
         public User Poster { get; set; }
-
         public int PosterId { get; set; }
-
         public string Message { get; set; }
-
         public Cities City { get; set; }
-
         public DateTime PostDate { get; set; }
-
         public NpgsqlTsVector SearchVector { get; set; }
 
         public override AdDto GetDto(AdDto dto)
