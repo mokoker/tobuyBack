@@ -31,7 +31,7 @@ namespace TB.Db.Services
 
         public AdDto GetAd(int id)
         {
-            return context.Ads.Find(id).GetDto();
+            return context.Ads.Include(y => y.Poster).SingleOrDefault(x=>x.Id==id).GetDto();
         }
         public void AddNewAd(AdDto dto)
         {
