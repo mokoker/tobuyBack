@@ -9,8 +9,8 @@ namespace ToBuy.Common.DTOs
         public string Filter { get; set; }
         public int Per_page { get; set; }
         public int Page { get; set; }
-  
         public int CategoryId { get; set; }
+        public bool ToSell { get; set; }
 
 
     }

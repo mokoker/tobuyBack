@@ -13,7 +13,7 @@ namespace ToBuy.Common.DTOs
         public int PosterId { get; set; }
         public string PosterName { get; set; }
         public string CategoryName { get; set; }
-
+        public bool ToSell { get; set; }
         public DateTime PostDate { get; set; }
 
         public Cities City { get; set; }

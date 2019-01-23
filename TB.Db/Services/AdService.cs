@@ -70,6 +70,7 @@ namespace TB.Db.Services
                 adEnts = adEnts
                .Where(p => p.SearchVector.Matches(dto.Filter));
             }
+            adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
             result.Last_page = (adEnts.Count() + dto.Per_page - 1) / dto.Per_page;
             var x = adEnts.OrderByDescending(j=>j.PostDate).Skip((dto.Page - 1) * 20).Take(20).Include(y => y.Poster).Include(z => z.Category);
             foreach (var y in x)

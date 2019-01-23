@@ -22,6 +22,7 @@ namespace TB.Db.Entities
         public string Message { get; set; }
         public Cities City { get; set; }
         public DateTime PostDate { get; set; }
+        public bool ToSell { get; set; }
         public NpgsqlTsVector SearchVector { get; set; }
 
         public override AdDto GetDto(AdDto dto)
@@ -40,6 +41,7 @@ namespace TB.Db.Entities
             dto.Id = Id;
             dto.Message = Message;
             dto.PostDate = PostDate;
+            dto.ToSell = ToSell;
             return dto;
         }
 
@@ -51,6 +53,7 @@ namespace TB.Db.Entities
             CategoryId = dto.CategoryId;
             PosterId = dto.PosterId;
             PostDate = dto.PostDate;
+            ToSell = dto.ToSell;
 
 
         }
