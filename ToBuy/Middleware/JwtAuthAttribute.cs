@@ -32,7 +32,8 @@ namespace ToBuy.Middleware
 
                 var yx = TokenHelper.Validate(zzx[0].Split("Bearer ")[1]);
                 var zz =  (Roles)Enum.Parse(typeof(Roles), yx.FindFirst(x => x.Type == ClaimTypes.Role).Value);
-                if ((int)(zz & this.allowedRoles) != 0)
+
+                if ((int)(zz & this.allowedRoles) != 0 || this.allowedRoles == Common.Enums.Roles.None)
                 {
                     user.AddIdentity(new ClaimsIdentity(yx.Identity));
                 }

@@ -15,7 +15,7 @@ namespace ToBuy.Common.DTOs
         public string CategoryName { get; set; }
         public bool ToSell { get; set; }
         public DateTime PostDate { get; set; }
-
+        public float Price { get; set; }
         public Cities City { get; set; }
         public string CityName
         {

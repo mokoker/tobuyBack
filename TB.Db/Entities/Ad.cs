@@ -24,6 +24,7 @@ namespace TB.Db.Entities
         public DateTime PostDate { get; set; }
         public bool ToSell { get; set; }
         public NpgsqlTsVector SearchVector { get; set; }
+        public float Price { get; set; }
 
         public override AdDto GetDto(AdDto dto)
         {
@@ -42,6 +43,7 @@ namespace TB.Db.Entities
             dto.Message = Message;
             dto.PostDate = PostDate;
             dto.ToSell = ToSell;
+            dto.Price = Price;
             return dto;
         }
 
@@ -54,7 +56,7 @@ namespace TB.Db.Entities
             PosterId = dto.PosterId;
             PostDate = dto.PostDate;
             ToSell = dto.ToSell;
-
+            Price = dto.Price;
 
         }
     }

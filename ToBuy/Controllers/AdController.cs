@@ -27,15 +27,12 @@ namespace ToBuy.Controllers
             return service.GetAd(id);
         }
 
-        [HttpGet(Name = "GetAds")]
-        public List<AdDto> GetAll()
-        {
-            return service.GetAds();
-        }
-
+        [JwtAuth(Common.Enums.Roles.None)]
         [HttpGet("[Action]",Name = "SearchX")]
         public SearchAdResultDto SearchX([FromQuery]SearchAdDto dto)
         {
+            if (dto.MyMessages)
+                dto.UserId = UserId;
             return service.SearchAd(dto);
         }
 
