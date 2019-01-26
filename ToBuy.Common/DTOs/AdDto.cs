@@ -17,6 +17,7 @@ namespace ToBuy.Common.DTOs
         public DateTime PostDate { get; set; }
         public float Price { get; set; }
         public Cities City { get; set; }
+        public PostState Stated { get; set; }
         public string CityName
         {
             get

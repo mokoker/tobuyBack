@@ -25,6 +25,7 @@ namespace TB.Db.Entities
         public bool ToSell { get; set; }
         public NpgsqlTsVector SearchVector { get; set; }
         public float Price { get; set; }
+        public PostState State { get; set; }
 
         public override AdDto GetDto(AdDto dto)
         {

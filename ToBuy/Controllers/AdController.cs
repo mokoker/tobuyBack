@@ -68,10 +68,11 @@ namespace ToBuy.Controllers
         {
         }
 
-        // DELETE: api/ApiWithActions/5
+        [JwtAuth(Common.Enums.Roles.User)]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            service.Delete(id, UserId);
         }
     }
 }

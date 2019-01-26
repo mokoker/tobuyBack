@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TB.Db.Entities;
 using ToBuy.Common.DTOs;
+using ToBuy.Common.Enums;
 
 namespace TB.Db.Services
 {
@@ -42,12 +43,19 @@ namespace TB.Db.Services
             context.SaveChanges();
         }
 
+        public void Delete(int id,int userId)
+        {
+            var ent = context.Ads.Single(x=>x.Id == id && x.PosterId == userId);
+            ent.State = PostState.Inactive;
+            context.SaveChanges();
+        }
+
          public SearchAdResultDto SearchAd(SearchAdDto dto)
         {
             SearchAdResultDto result = new SearchAdResultDto(dto);
 
             List<AdDto> ads = new List<AdDto>();
-            IQueryable<Ad> adEnts = context.Ads;
+            IQueryable<Ad> adEnts = context.Ads.Where(k=>k.State == PostState.Active);
 
             if (dto.CategoryId != 0)
             {
