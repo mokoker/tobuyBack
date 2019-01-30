@@ -13,6 +13,8 @@ namespace ToBuy.Common.DTOs
         public bool ToSell { get; set; }
         public int UserId { get; set; }
         public bool MyMessages { get; set; }
+        public List<int> Cities { get; set; }
+
 
 
     }

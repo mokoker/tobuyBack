@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using TB.Db;
 using ToBuy.Middleware;
+using static ToBuy.Middleware.CsvModelBinder<int>;
 
 namespace ToBuy
 {
@@ -29,6 +30,7 @@ namespace ToBuy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config => config.ModelBinderProviders.Insert(0, new CsvModelBinderProvider()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
