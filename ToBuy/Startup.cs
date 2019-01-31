@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using TB.Db;
 using ToBuy.Middleware;
-using static ToBuy.Middleware.CsvModelBinder<int>;
+using static ToBuy.Middleware.CsvModelBinder<ToBuy.Common.Enums.Cities>;
 
 namespace ToBuy
 {

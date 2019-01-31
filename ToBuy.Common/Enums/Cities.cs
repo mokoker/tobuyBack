@@ -6,7 +6,7 @@ namespace ToBuy.Common.Enums
 {
     public enum Cities
     {
-        Adana,
+        Adana=1,
         Adıyaman,
         Afyon,
         Ağrı,

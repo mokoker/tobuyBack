@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ToBuy.Common.Enums;
 
 namespace ToBuy.Middleware
 {
@@ -30,7 +31,7 @@ namespace ToBuy.Middleware
                     .Cast<string>();
 
                 var convertedValues = splitValues
-                    .Select(str => Convert.ChangeType(str, typeof(T)))
+                    .Select(str => Enum.Parse(typeof(Cities),str))
                     .Cast<T>();
 
                 model.AddRange(convertedValues);
@@ -45,9 +46,9 @@ namespace ToBuy.Middleware
         {
             public IModelBinder GetBinder(ModelBinderProviderContext context)
             {
-                if (context.Metadata.ModelType == typeof(List<int>))
+                if (context.Metadata.ModelType == typeof(List<Cities>))
                 {
-                    return new CsvModelBinder<int>();
+                    return new CsvModelBinder<Cities>();
                 }
 
                 return null;

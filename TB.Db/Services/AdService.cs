@@ -71,6 +71,10 @@ namespace TB.Db.Services
             {
                 adEnts = adEnts.Where(p => p.SearchVector.Matches(dto.Filter));
             }
+            if(dto.Cities != null && dto.Cities.Count>0)
+            {
+                adEnts = adEnts.Where(p => dto.Cities.Contains(p.City));
+            }
             adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
             result.Last_page = (adEnts.Count() + dto.Per_page - 1) / dto.Per_page;
             var x = adEnts.OrderByDescending(j => j.PostDate).Skip((dto.Page - 1) * 20).Take(20).Include(y => y.Poster).Include(z => z.Category);

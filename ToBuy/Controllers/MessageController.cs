@@ -28,12 +28,11 @@ namespace ToBuy.Controllers
             value.SenId = UserId;
             service.AddNewMessage(value);
         }
-
-
-        [HttpPost("PostDev")]
-        public void PostDev([FromBody] MessageDto value)
+        [JwtAuth(Common.Enums.Roles.User)]
+        [HttpDelete("{id}")]
+        public void DeleteMessage(int id)
         {
-            service.AddNewMessage(value);
+            service.DeleteMessage(id, UserId);
         }
 
         [JwtAuth(Common.Enums.Roles.User)]

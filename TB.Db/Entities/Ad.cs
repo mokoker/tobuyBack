@@ -45,6 +45,7 @@ namespace TB.Db.Entities
             dto.PostDate = PostDate;
             dto.ToSell = ToSell;
             dto.Price = Price;
+            dto.City = City;
             return dto;
         }
 

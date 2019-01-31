@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ToBuy.Common.Enums;
 
 namespace ToBuy.Common.DTOs
 {
@@ -13,7 +14,7 @@ namespace ToBuy.Common.DTOs
         public bool ToSell { get; set; }
         public int UserId { get; set; }
         public bool MyMessages { get; set; }
-        public List<int> Cities { get; set; }
+        public List<Cities> Cities { get; set; }
 
 
 
