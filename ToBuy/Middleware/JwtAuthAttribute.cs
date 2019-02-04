@@ -24,23 +24,33 @@ namespace ToBuy.Middleware
             if (!user.Identity.IsAuthenticated)
             {
                 var zzx = context.HttpContext.Request.Headers["Authorization"];
-                if (string.IsNullOrEmpty(zzx))
+                if (string.IsNullOrEmpty(zzx) && allowedRoles != Common.Enums.Roles.None)
                 {
                     context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Unauthorized);
                     return;
                 }
-
-                var yx = TokenHelper.Validate(zzx[0].Split("Bearer ")[1]);
-                var zz =  (Roles)Enum.Parse(typeof(Roles), yx.FindFirst(x => x.Type == ClaimTypes.Role).Value);
-
-                if ((int)(zz & this.allowedRoles) != 0 || this.allowedRoles == Common.Enums.Roles.None)
+                try
                 {
-                    user.AddIdentity(new ClaimsIdentity(yx.Identity));
+                    var yx = TokenHelper.Validate(zzx[0].Split("Bearer ")[1]);
+                    var zz = (Roles)Enum.Parse(typeof(Roles), yx.FindFirst(x => x.Type == ClaimTypes.Role).Value);
+
+                    if ((int)(zz & this.allowedRoles) != 0 || this.allowedRoles == Common.Enums.Roles.None)
+                    {
+                        user.AddIdentity(new ClaimsIdentity(yx.Identity));
+                    }
+                    else
+                    {
+                        throw new UnauthorizedAccessException();
+                    }
                 }
-                else
+                catch
                 {
-                    context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Unauthorized);
-                    return;
+                    if (allowedRoles != Common.Enums.Roles.None)
+                    {
+                        context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Unauthorized);
+                        return;
+                    }
+           
                 }
             }
 

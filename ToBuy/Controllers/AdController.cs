@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
@@ -27,6 +28,7 @@ namespace ToBuy.Controllers
             return service.GetAd(id);
         }
 
+        [AllowAnonymous]
         [JwtAuth(Common.Enums.Roles.None)]
         [HttpGet("[Action]",Name = "SearchX")]
         public SearchAdResultDto SearchX([FromQuery]SearchAdDto dto)
@@ -42,7 +44,6 @@ namespace ToBuy.Controllers
         public void Post([FromBody] AdDto value)
         {
             value.PosterId = UserId;
-            var x = HttpContext.Authentication;
             service.AddNewAd(value);
         
         }

@@ -20,7 +20,7 @@ namespace ToBuy
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:5000")
+                .UseUrls("http://*:5000")
                 .UseKestrel(options =>
                 {
                     // Set properties and call methods on options
