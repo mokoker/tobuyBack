@@ -10,13 +10,17 @@ namespace TB.Db.Services
 {
     public class AdService : BaseService
     {
-        private Dictionary<int, List<int>> lookup;
+        private static Dictionary<int, List<int>> lookup;
         public AdService(ToBuyContext context) : base(context)
         {
-            CategoryService service = new CategoryService(context);
-            Category cat = service.GetMainCategory();
-            lookup = new Dictionary<int, List<int>>();
-            FillDict(cat);
+            if (lookup == null)
+            {
+                CategoryService service = new CategoryService(context);
+                Category cat = context.Categories.ToList().First(x => x.Id == 1);
+                lookup = new Dictionary<int, List<int>>();
+                FillDict(cat);
+
+            }
         }
 
         private void FillDict(Category cat)

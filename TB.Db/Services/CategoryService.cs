@@ -9,24 +9,20 @@ namespace TB.Db.Services
 {
     public class CategoryService : BaseService
     {
-        private Category mainCategory;
-        private object lockObject = new object();
+        private static CategoryDto mainCategory;
+        private static object lockObject = new object();
         public CategoryService(ToBuyContext context) : base(context)
         {
         }
 
-        private void FillMainCategory()
-        {
-            lock (lockObject)
-            {
-                mainCategory = context.Categories.ToList().First(x => x.Id == 1);
-            }
-        }
-        protected internal Category GetMainCategory()
+        protected internal CategoryDto GetMainCategory()
         {
             if (mainCategory == null)
             {
-                FillMainCategory();
+                lock (lockObject)
+                {
+                    mainCategory = context.Categories.ToList().First(x => x.Id == 1).GetDto();
+                }
             }
             return mainCategory;
         }
@@ -34,7 +30,7 @@ namespace TB.Db.Services
         {
             if (id == 1)
             {
-                GetMainCategory().GetDto();
+              return  GetMainCategory();
             }
 
             return context.Categories.Include(x => x.Childs).First(c => c.Id == id).GetDto();

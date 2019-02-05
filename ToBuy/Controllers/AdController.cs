@@ -35,6 +35,7 @@ namespace ToBuy.Controllers
         {
             if (dto.MyMessages)
                 dto.UserId = UserId;
+
             return service.SearchAd(dto);
         }
 
