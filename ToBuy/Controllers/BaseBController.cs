@@ -13,5 +13,12 @@ namespace ToBuy.Controllers
                 return int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             }
         }
+        protected string UserName
+        {
+            get
+            {
+                return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+            }
+        }
     }
 }

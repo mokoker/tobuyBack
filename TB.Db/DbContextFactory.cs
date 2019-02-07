@@ -12,7 +12,7 @@ namespace TB.Db
         {
             Console.WriteLine("ok");
             var options = new DbContextOptionsBuilder<ToBuyContext>()
-           .UseNpgsql("Server=63.34.83.147;Port=5432;Database=tobuy;User Id=postgres; Password=1234qqqQ;")
+           .UseNpgsql("Server=localhost;Port=5432;Database=tobuy;User Id=postgres; Password=1234qqqQ;")
            .Options;
             return new ToBuyContext(options);
         }

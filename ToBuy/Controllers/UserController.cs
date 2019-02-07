@@ -5,6 +5,9 @@ using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
 using ToBuy.Common.Exceptions;
+using ToBuy.Common.Helpers;
+using ToBuy.Helpers;
+using ToBuy.Middleware;
 
 namespace ToBuy.Controllers
 {
@@ -33,7 +36,6 @@ namespace ToBuy.Controllers
         [HttpPost("Login")]
         public IActionResult Login(UserDto user)
         { 
-            HttpResponseMessage response;
             ToBuyContext context = new ToBuyContext();
             UserService service = new UserService(context);
             UserDto result = service.Login(user);
@@ -46,6 +48,13 @@ namespace ToBuy.Controllers
             {
                 return Ok(result);
             }
+        }
+        [HttpPut]
+        public void Test()
+        {
+            var cont = new ToBuyContext();
+          
+
         }
     }
 }

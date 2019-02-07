@@ -33,6 +33,10 @@ namespace TB.Db.Services
             dto.Password = "";
             return dto;
         }
+        public UserDto GetUser(int id)
+        {
+            return context.Users.Single(x => x.Id == id).GetDto();
+        }
 
         public UserDto Login(UserDto dto)
         {

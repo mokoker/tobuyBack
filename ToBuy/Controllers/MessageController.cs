@@ -1,45 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
+using ToBuy.Common.Helpers;
+using ToBuy.Helpers;
 using ToBuy.Middleware;
 
 namespace ToBuy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MessageController :  BaseBController
+    public class MessageController : BaseBController
     {
-        private MessageService service;
+        private EmailCreator crea;
+        private MessageService messageService;
+        private UserService userService;
         public MessageController()
         {
             ToBuyContext context = new ToBuyContext();
-            service = new MessageService(context);
+            messageService = new MessageService(context);
+            crea = new EmailCreator(context);
+            userService = new UserService(context);
         }
         [JwtAuth(Common.Enums.Roles.User)]
         [HttpPost]
         public void Post([FromBody] MessageDto value)
         {
             value.SenId = UserId;
-            service.AddNewMessage(value);
+            messageService.AddNewMessage(value);
+            var receiver = userService.GetUser(value.RecId);
+            var mail = crea.GenerateMessageMail(receiver.UserName, UserName, receiver.Email, value.Text);
+            EmailSender sender = new EmailSender();
+            sender.SendMessage(mail);
         }
         [JwtAuth(Common.Enums.Roles.User)]
         [HttpDelete("{id}")]
         public void DeleteMessage(int id)
         {
-            service.DeleteMessage(id, UserId);
+            messageService.DeleteMessage(id, UserId);
         }
 
         [JwtAuth(Common.Enums.Roles.User)]
         [HttpGet]
         public List<MessageDto> GetAllMessages()
         {
-            return service.GetUserMessages(UserId);
+            return messageService.GetUserMessages(UserId);
 
         }
 

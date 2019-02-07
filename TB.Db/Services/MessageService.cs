@@ -24,6 +24,8 @@ namespace TB.Db.Services
             context.SaveChanges();
         }
 
+
+
         public void DeleteMessage(int messageId,int userId)
         {
             var resultEnt = context.Messages.Single(x => x.Id == messageId);
