@@ -19,5 +19,6 @@ namespace ToBuy.Common.DTOs
         public int To { get { return (Page ) * Per_page; } }
         public List<AdDto> Data{get;set;}
         public int Last_page { get; set; }
+        public int Current_page { get { return Page; } }
     }
 }

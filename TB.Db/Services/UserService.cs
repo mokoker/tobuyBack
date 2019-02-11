@@ -17,11 +17,12 @@ namespace TB.Db.Services
 
         public UserDto AddNewUser(UserDto dto)
         {
-            var existing = context.Users.FirstOrDefault(x => x.Email == dto.Email);
+            var existing = context.Users.FirstOrDefault(x => x.Email == dto.Email || x.UserName == dto.UserName);
             if (existing != null)
             {
                 throw new UserExistsException("User exists");
             }
+
             User user = User.GetEnt(dto);
             context.Users.Add(user);
             context.SaveChanges();
@@ -76,6 +77,7 @@ namespace TB.Db.Services
             }
             secretUser.SettPass(dto.NewPassword);
             secretUser.MailSecret = null;
+            context.SaveChanges();
         }
     }
 }
