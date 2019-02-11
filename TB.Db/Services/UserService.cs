@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using TB.Db.Entities;
 using ToBuy.Common.DTOs;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Linq;
 using ToBuy.Common.Exceptions;
+using ToBuy.Common.Helpers;
 
 namespace TB.Db.Services
 {
     public class UserService : BaseService
     {
-    
+
         public UserService(ToBuyContext context) : base(context)
         {
-          
+
         }
 
         public UserDto AddNewUser(UserDto dto)
@@ -38,6 +34,23 @@ namespace TB.Db.Services
             return context.Users.Single(x => x.Id == id).GetDto();
         }
 
+        public ForgotPasswordResultDto ForgotPassword(string email)
+        {
+            var user = context.Users.SingleOrDefault(x => x.Email == email);
+            if (user !=null && string.IsNullOrEmpty(user.MailSecret))
+            {
+                user.SecretDate = DateTime.Now;
+                user.MailSecret = RandomString.GenerateCoupon(8);
+                context.Update(user);
+                context.SaveChanges();
+                return new ForgotPasswordResultDto { Name = user.UserName, Secret = user.MailSecret };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public UserDto Login(UserDto dto)
         {
             User userFromUser = User.GetEnt(dto);
@@ -54,8 +67,15 @@ namespace TB.Db.Services
             }
         }
 
-
-    
-
+        public void ChangePass(ChangePassDto dto)
+        {
+            var secretUser = context.Users.SingleOrDefault(x => x.MailSecret == dto.Secret);
+            if (secretUser == null)
+            {
+                throw new PassChangeException("No such thing");
+            }
+            secretUser.SettPass(dto.NewPassword);
+            secretUser.MailSecret = null;
+        }
     }
 }

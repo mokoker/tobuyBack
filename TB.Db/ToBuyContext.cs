@@ -1,10 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using TB.Db.Entities;
 
 namespace TB.Db
@@ -21,6 +17,18 @@ namespace TB.Db
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Category>()
+             .HasIndex(p => p.Id);
+
+            modelBuilder.Entity<User>()
+             .HasIndex(p => p.Id);
+
+            modelBuilder.Entity<Message>()
+            .HasIndex(p => p.Id);
+
+            modelBuilder.Entity<Mail>()
+            .HasIndex(p => p.Id);
+
             modelBuilder.Entity<Ad>()
                 .HasIndex(p => p.SearchVector)
                 .ForNpgsqlHasMethod("GIN"); // Index method on the search vector (GIN or GIST)
@@ -39,7 +47,7 @@ namespace TB.Db
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Ad> Ads { get; set; }
-        public DbSet<User> Users { get; set; }  
+        public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Mail> Mails { get; set; }
 

@@ -14,9 +14,16 @@ namespace ToBuy.Helpers
         {
             service = new MailService(context);
         }
-        public MailDto GeneratePasswordMail()
+        public MailDto GeneratePasswordMail(string userName,string secret,string mailTo)
         {
+            string url = "https://karasayfa.com/#/reset?secret=" + secret;
            MailDto dto = service.GetMailTemplate(MailType.PasswordReminder);
+            dto.HtmlMessage = dto.HtmlMessage.Replace("{{UserName}}", userName)
+               .Replace("{{Secret}}", url);
+
+            dto.Textmessage = dto.Textmessage.Replace("{{UserName}}", userName)
+                .Replace("{{Secret}}", url);
+            dto.ReceiverAddress = mailTo;
             return dto;
         }
 

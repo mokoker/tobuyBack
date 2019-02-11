@@ -14,6 +14,9 @@ namespace TB.Db.Entities
         public string PassHash { get; set; }
         public Roles UserRoles { get; set; }
         public List<Ad> Ads { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public string MailSecret { get; set; }
+        public DateTime SecretDate { get; set; }
 
         public override UserDto GetDto(UserDto dto)
         {
@@ -28,11 +31,15 @@ namespace TB.Db.Entities
         {
             UserName = dto.UserName;
             Email = dto.Email;
-            PassHash = BCrypt.Net.BCrypt.HashPassword(dto.Password, salt);
+            SettPass(dto.Password);
             Id = dto.Id;
             UserRoles = dto.UserRoles;
+            RegistrationDate = DateTime.Now;
         }
 
-
+        public void SettPass(string pass)
+        {
+            PassHash = BCrypt.Net.BCrypt.HashPassword(pass, salt);
+        }
     }
 }

@@ -54,6 +54,4 @@ namespace TB.Db
             Id = dto.Id;
         }
     }
-
-
 }
