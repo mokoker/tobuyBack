@@ -100,6 +100,7 @@ namespace TB.Db.Migrations
              @"CREATE TRIGGER product_search_vector_update BEFORE INSERT OR UPDATE
               ON ""Ads"" FOR EACH ROW EXECUTE PROCEDURE
               tsvector_update_trigger(""SearchVector"", 'pg_catalog.turkish', ""Title"", ""Message"");");
+
             migrationBuilder.InsertData(
             table: "Categories",
             columns: new[] { "Name","ParentId" },

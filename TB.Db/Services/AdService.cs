@@ -73,7 +73,7 @@ namespace TB.Db.Services
             }
             if (!string.IsNullOrEmpty(dto.Filter))
             {
-                adEnts = adEnts.Where(p => p.SearchVector.Matches(dto.Filter));
+                adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish",dto.Filter)));
             }
             if(dto.Cities != null && dto.Cities.Count>0)
             {
