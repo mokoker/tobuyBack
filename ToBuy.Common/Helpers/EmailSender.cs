@@ -56,7 +56,7 @@ namespace ToBuy.Common.Helpers
                 try
                 {
                     Task<SendEmailResponse> response = client.SendEmailAsync(sendRequest);
-                    response.Wait();
+                  //  response.Wait();
                 }
                 catch (Exception ex)
                 {

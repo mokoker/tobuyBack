@@ -47,6 +47,7 @@ namespace ToBuy
                 options.AccessDeniedPath = new PathString("/auth/denied");
             });
             services.AddDbContext<ToBuyContext>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

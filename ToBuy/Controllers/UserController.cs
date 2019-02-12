@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
@@ -14,7 +15,7 @@ namespace ToBuy.Controllers
     {
         private ToBuyContext context;
         private UserService service;
-        public UserController()
+        public UserController(IHttpContextAccessor accessor) :base(accessor)
         {
             context = new ToBuyContext();
             service = new UserService(context);
@@ -23,6 +24,7 @@ namespace ToBuy.Controllers
         public IActionResult Post([FromBody] UserDto user)
         {
             user.UserRoles = Common.Enums.Roles.User;
+            user.IpAddress = IpAddress;
             try
             {
                 var x = service.AddNewUser(user);

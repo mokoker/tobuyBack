@@ -17,6 +17,7 @@ namespace TB.Db.Entities
         public DateTime RegistrationDate { get; set; }
         public string MailSecret { get; set; }
         public DateTime SecretDate { get; set; }
+        public string IpAddress { get; set; }
 
         public override UserDto GetDto(UserDto dto)
         {
@@ -35,6 +36,7 @@ namespace TB.Db.Entities
             Id = dto.Id;
             UserRoles = dto.UserRoles;
             RegistrationDate = DateTime.Now;
+            IpAddress = dto.IpAddress;
         }
 
         public void SettPass(string pass)

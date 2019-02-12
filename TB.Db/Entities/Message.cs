@@ -19,6 +19,8 @@ namespace TB.Db.Entities
         public DateTime SentDate { get; set; }
         public MessageStatus ReceiverStatus { get; set; }
         public MessageStatus SenderStatus { get; set; }
+        public string IpAddress { get; set; }
+
         public override MessageDto GetDto(MessageDto dto)
         {
             dto.Id =Id;
@@ -37,6 +39,7 @@ namespace TB.Db.Entities
             this.Text = dto.Text;
             this.ReceiverId = dto.RecId;
             this.SenderId = dto.SenId;
+            this.IpAddress = dto.IpAddress;
         }
     }
 }

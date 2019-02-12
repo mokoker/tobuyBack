@@ -26,6 +26,7 @@ namespace TB.Db.Entities
         public NpgsqlTsVector SearchVector { get; set; }
         public float Price { get; set; }
         public PostState State { get; set; }
+        public string IpAddress { get; set; }
 
         public override AdDto GetDto(AdDto dto)
         {
@@ -59,6 +60,7 @@ namespace TB.Db.Entities
             PostDate = dto.PostDate;
             ToSell = dto.ToSell;
             Price = dto.Price;
+            IpAddress = dto.IpAddress;
 
         }
     }

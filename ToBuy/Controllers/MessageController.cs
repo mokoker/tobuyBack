@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
@@ -16,7 +17,7 @@ namespace ToBuy.Controllers
         private EmailCreator crea;
         private MessageService messageService;
         private UserService userService;
-        public MessageController()
+        public MessageController(IHttpContextAccessor accessor) : base(accessor)
         {
             ToBuyContext context = new ToBuyContext();
             messageService = new MessageService(context);
@@ -28,6 +29,7 @@ namespace ToBuy.Controllers
         public void Post([FromBody] MessageDto value)
         {
             value.SenId = UserId;
+            value.IpAddress = IpAddress;
             messageService.AddNewMessage(value);
             var receiver = userService.GetUser(value.RecId);
             var mail = crea.GenerateMessageMail(receiver.UserName, UserName, receiver.Email, value.Text);

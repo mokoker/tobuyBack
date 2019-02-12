@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
@@ -15,7 +16,7 @@ namespace ToBuy.Controllers
     public class XController : BaseBController
     {
         private AdService service;
-        public XController()
+        public XController(IHttpContextAccessor accessor) :base(accessor)
         {
             ToBuyContext context = new ToBuyContext();
             service = new AdService(context);
@@ -44,6 +45,7 @@ namespace ToBuy.Controllers
         [HttpPost]
         public void Post([FromBody] AdDto value)
         {
+            value.IpAddress = IpAddress;
             value.PosterId = UserId;
             service.AddNewAd(value);
         
