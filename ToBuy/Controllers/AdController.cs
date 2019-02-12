@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
@@ -16,8 +18,12 @@ namespace ToBuy.Controllers
     public class XController : BaseBController
     {
         private AdService service;
-        public XController(IHttpContextAccessor accessor) :base(accessor)
+        private readonly IMemoryCache memoryCache;
+        private static MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions().SetSize(1024).SetSlidingExpiration(TimeSpan.FromSeconds(180));
+
+        public XController(IHttpContextAccessor accessor, IMemoryCache memoryCache) :base(accessor)
         {
+            this.memoryCache = memoryCache;
             ToBuyContext context = new ToBuyContext();
             service = new AdService(context);
         }
@@ -35,9 +41,24 @@ namespace ToBuy.Controllers
         public SearchAdResultDto SearchX([FromQuery]SearchAdDto dto)
         {
             if (dto.MyMessages)
+            {
                 dto.UserId = UserId;
-
-            return service.SearchAd(dto);
+                return service.SearchAd(dto);
+            }
+            else
+            {
+                SearchAdResultDto result;
+                string cit = dto.Cities != null ? String.Join(",", dto.Cities) : "";
+                string cacheKey = dto.CategoryId.ToString() + cit + dto.Page + dto.ToSell;
+                bool isExist = memoryCache.TryGetValue(cacheKey, out result);
+                if (!isExist)
+                {
+                    result= service.SearchAd(dto);
+               
+                    memoryCache.Set(cacheKey, result, cacheEntryOptions);
+                }
+                return result ;
+            }
         }
 
         // POST: api/Ad
