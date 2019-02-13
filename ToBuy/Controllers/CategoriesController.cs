@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
+using ToBuy.Common.Enums;
+using ToBuy.Middleware;
 
 namespace ToBuy.Controllers
 {
@@ -24,7 +26,7 @@ namespace ToBuy.Controllers
             return cs.GetCategory(id);
         }
 
-        // POST: api/Categories
+        [JwtAuth(Roles.Administrator)]
         [HttpPost]
         public void Post([FromBody] CategoryDto value)
         {

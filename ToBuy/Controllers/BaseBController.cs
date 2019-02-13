@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ToBuy.Common.Enums;
 
 namespace ToBuy.Controllers
 {
@@ -28,6 +30,14 @@ namespace ToBuy.Controllers
             get
             {
                 return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+            }
+        }
+
+        protected Roles UserRole
+        {
+            get
+            {
+                return (Roles)Enum.Parse(typeof(Roles), User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value);
             }
         }
 

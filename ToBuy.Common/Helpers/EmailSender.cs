@@ -13,16 +13,6 @@ namespace ToBuy.Common.Helpers
 {
     public class EmailSender
     {
-        //private static readonly string senderAddress = "test@karasayfa.com";
-        //private static readonly string receiverAddress = "mokoker@gmail.com";
-        //private static readonly string subject = "Amazon SES test (AWS SDK for .NET)";
-        //private static readonly string textBody = "Amazon SES Test (.NET)\r\n"
-        //                                + "This email was sent through Amazon SES "
-        //                                + "using the AWS SDK for .NET.";
-
-        //// The HTML body of the email.
-        //private static readonly string htmlBody = File.ReadAllText(@"Helpers/mail1.ml", Encoding.UTF8);
-
         public void SendMessage(MailDto dto)
         {
             using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
@@ -56,16 +46,13 @@ namespace ToBuy.Common.Helpers
                 try
                 {
                     Task<SendEmailResponse> response = client.SendEmailAsync(sendRequest);
-                  //  response.Wait();
+                   response.Wait();
                 }
                 catch (Exception ex)
                 {
                     throw new EmailSendException(ex.Message);
                 }
             }
-
-
         }
-
     }
 }

@@ -11,15 +11,21 @@ namespace TB.Db.Services
     public class AdService : BaseService
     {
         private static Dictionary<int, List<int>> lookup;
+        private static object lockme = new object(); 
         public AdService(ToBuyContext context) : base(context)
         {
             if (lookup == null)
             {
-                CategoryService service = new CategoryService(context);
-                Category cat = context.Categories.ToList().First(x => x.Id == 1);
-                lookup = new Dictionary<int, List<int>>();
-                FillDict(cat);
-
+                lock (lockme)
+                {
+                    if (lookup == null)
+                    {
+                        CategoryService service = new CategoryService(context);
+                        Category cat = context.Categories.ToList().First(x => x.Id == 1);
+                        lookup = new Dictionary<int, List<int>>();
+                        FillDict(cat);
+                    }
+                }
             }
         }
 
@@ -56,8 +62,11 @@ namespace TB.Db.Services
 
          public SearchAdResultDto SearchAd(SearchAdDto dto)
         {
+            if (dto.Per_page == 0)
+                dto.Per_page = 10;
+            if (dto.Page == 0)
+                dto.Page = 1;
             SearchAdResultDto result = new SearchAdResultDto(dto);
-
             List<AdDto> ads = new List<AdDto>();
             IQueryable<Ad> adEnts = context.Ads.Where(k=>k.State == PostState.Active);
 
@@ -75,11 +84,14 @@ namespace TB.Db.Services
             {
                 adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish",dto.Filter)));
             }
+            else
+            {
+                adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
+            }
             if(dto.Cities != null && dto.Cities.Count>0)
             {
                 adEnts = adEnts.Where(p => dto.Cities.Contains(p.City));
             }
-            adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
             result.Last_page = (adEnts.Count() + dto.Per_page - 1) / dto.Per_page;
             var x = adEnts.OrderByDescending(j => j.PostDate).Skip((dto.Page - 1) * 20).Take(20).Include(y => y.Poster).Include(z => z.Category);
             foreach (var y in x)

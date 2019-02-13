@@ -7,9 +7,8 @@ using Microsoft.Extensions.Caching.Memory;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
-using ToBuy.Common.Helpers;
+using ToBuy.Common.Enums;
 using ToBuy.Middleware;
-
 
 namespace ToBuy.Controllers
 {
@@ -19,7 +18,7 @@ namespace ToBuy.Controllers
     {
         private AdService service;
         private readonly IMemoryCache memoryCache;
-        private static MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions().SetSize(1024).SetSlidingExpiration(TimeSpan.FromSeconds(180));
+        private static MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions().SetSize(1).SetSlidingExpiration(TimeSpan.FromSeconds(180));
 
         public XController(IHttpContextAccessor accessor, IMemoryCache memoryCache) :base(accessor)
         {
@@ -28,7 +27,6 @@ namespace ToBuy.Controllers
             service = new AdService(context);
         }
 
-        // GET: api/Ad/5
         [HttpGet("{id}", Name = "GeTAd")]
         public AdDto Get(int id)
         {
@@ -36,7 +34,7 @@ namespace ToBuy.Controllers
         }
 
         [AllowAnonymous]
-        [JwtAuth(Common.Enums.Roles.None)]
+        [JwtAuth(Roles.None)]
         [HttpGet("[Action]",Name = "SearchX")]
         public SearchAdResultDto SearchX([FromQuery]SearchAdDto dto)
         {
@@ -49,7 +47,7 @@ namespace ToBuy.Controllers
             {
                 SearchAdResultDto result;
                 string cit = dto.Cities != null ? String.Join(",", dto.Cities) : "";
-                string cacheKey = dto.CategoryId.ToString() + cit + dto.Page + dto.ToSell;
+                string cacheKey = dto.CategoryId.ToString() + dto.Filter +cit + dto.Page + dto.ToSell;
                 bool isExist = memoryCache.TryGetValue(cacheKey, out result);
                 if (!isExist)
                 {
@@ -61,39 +59,19 @@ namespace ToBuy.Controllers
             }
         }
 
-        // POST: api/Ad
-        [JwtAuth(Common.Enums.Roles.User)]
+        [JwtAuth(Roles.User)]
         [HttpPost]
         public void Post([FromBody] AdDto value)
         {
             value.IpAddress = IpAddress;
-            value.PosterId = UserId;
-            service.AddNewAd(value);
-        
-        }
-
-        [HttpPost("[Action]",Name = "FillRandomBulk")]
-        public void FillRandomBulk()
-        {
-            for(int i = 0;i<20;i++)
+            if (UserRole != Roles.Administrator)
             {
-                AdDto dto = new AdDto();
-                dto.CategoryId = 5;
-                dto.City = Common.Enums.Cities.Ankara;
-                dto.Message = RandomTextGenerator.RandomString(100);
-                dto.Title = RandomTextGenerator.RandomString(20);
-                dto.PosterId = 1;
-                service.AddNewAd(dto);
+                value.PosterId = UserId;
             }
+            service.AddNewAd(value);       
         }
 
-        // PUT: api/Ad/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [JwtAuth(Common.Enums.Roles.User)]
+        [JwtAuth(Roles.User)]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
