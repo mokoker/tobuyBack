@@ -23,6 +23,12 @@ namespace ToBuy.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserDto user)
         {
+            if (user.Password.Length < 6)
+                return StatusCode(406, "sifren cok kisa");
+            if (user.UserName.Length < 4)
+                return StatusCode(406, "kullanici adin cok kisa");
+            if (user.UserName.Length > 12)
+                return StatusCode(406, "kullanici adin cok uzun");
             user.UserRoles = Common.Enums.Roles.User;
             user.IpAddress = IpAddress;
             try

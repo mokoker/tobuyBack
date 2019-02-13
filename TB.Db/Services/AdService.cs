@@ -11,7 +11,7 @@ namespace TB.Db.Services
     public class AdService : BaseService
     {
         private static Dictionary<int, List<int>> lookup;
-        private static object lockme = new object(); 
+        private static object lockme = new object();
         public AdService(ToBuyContext context) : base(context)
         {
             if (lookup == null)
@@ -53,22 +53,28 @@ namespace TB.Db.Services
             context.SaveChanges();
         }
 
-        public void Delete(int id,int userId)
+        public void Delete(int id, int userId)
         {
-            var ent = context.Ads.Single(x=>x.Id == id && x.PosterId == userId);
+            var ent = context.Ads.Single(x => x.Id == id && x.PosterId == userId);
             ent.State = PostState.Inactive;
             context.SaveChanges();
         }
 
-         public SearchAdResultDto SearchAd(SearchAdDto dto)
+        public SearchAdResultDto SearchAd(SearchAdDto dto)
         {
             if (dto.Per_page == 0)
+            {
                 dto.Per_page = 10;
+            }
+
             if (dto.Page == 0)
+            {
                 dto.Page = 1;
+            }
+
             SearchAdResultDto result = new SearchAdResultDto(dto);
             List<AdDto> ads = new List<AdDto>();
-            IQueryable<Ad> adEnts = context.Ads.Where(k=>k.State == PostState.Active);
+            IQueryable<Ad> adEnts = context.Ads.Where(k => k.State == PostState.Active);
 
             if (dto.CategoryId != 0)
             {
@@ -80,17 +86,17 @@ namespace TB.Db.Services
             {
                 adEnts = adEnts.Where(p => p.PosterId == dto.UserId);
             }
-            if (!string.IsNullOrEmpty(dto.Filter))
+            else if (!string.IsNullOrEmpty(dto.Filter))
             {
-                adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish",dto.Filter)));
+                adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish", dto.Filter)));
             }
             else
             {
                 adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
-            }
-            if(dto.Cities != null && dto.Cities.Count>0)
-            {
-                adEnts = adEnts.Where(p => dto.Cities.Contains(p.City));
+                if (dto.Cities != null && dto.Cities.Count > 0)
+                {
+                    adEnts = adEnts.Where(p => dto.Cities.Contains(p.City));
+                }
             }
             result.Last_page = (adEnts.Count() + dto.Per_page - 1) / dto.Per_page;
             var x = adEnts.OrderByDescending(j => j.PostDate).Skip((dto.Page - 1) * 20).Take(20).Include(y => y.Poster).Include(z => z.Category);
