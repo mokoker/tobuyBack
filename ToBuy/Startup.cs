@@ -81,7 +81,7 @@ namespace ToBuy
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Ssr}/{action=Index}/{id?}");
+                    template: "{controller=Main}/{action=Index}/{id?}");
             });
         }
     }
