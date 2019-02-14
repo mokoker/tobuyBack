@@ -1,0 +1,22 @@
+﻿@model ToBuy.Common.DTOs.SearchAdResultDto;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Posts</title>
+</head>
+<body>
+    <a href="https://karasayfa.com/#/?s=categoryId-@Model.CategoryId">Tam surumu icin tiklayin</a>
+    <ul>
+        @foreach (var post in Model.Data)
+        {
+            <li><a href="../post/@post.Id">@post.Title</a> </li>
+        }
+    </ul>
+</body>
+</html>

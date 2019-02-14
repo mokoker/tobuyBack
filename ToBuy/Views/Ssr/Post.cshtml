@@ -1,0 +1,22 @@
+﻿@model ToBuy.Common.DTOs.AdDto;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Post</title>
+    <a href="https://karasayfa.com/#/d?id=@Model.Id">Tam surumu icin tiklayin</a>
+    <div>Baslik : @Model.Title</div>
+    <div>Mesaj : @Model.Message</div>
+    <div>Gonderim Zamani : @Model.PostDate</div>
+    <div>Fiyat : @Model.Price</div>
+    <div>Gonderen : @Model.PosterName</div>
+    <div>Sehir : @Model.CityName</div>
+</head>
+<body>
+</body>
+</html>

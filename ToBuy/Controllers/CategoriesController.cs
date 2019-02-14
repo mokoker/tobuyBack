@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TB.Db;
 using TB.Db.Services;
 using ToBuy.Common.DTOs;
@@ -16,13 +11,17 @@ namespace ToBuy.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
+        private CategoryService cs;
+        public CategoriesController()
+        {
+            ToBuyContext context = new ToBuyContext();
+            cs = new CategoryService(context);
+        }
 
         // GET: api/Categories/5
         [HttpGet("{id}", Name = "GetCategories")]
         public CategoryDto Get(int id)
         {
-            ToBuyContext context = new ToBuyContext();
-            CategoryService cs = new CategoryService(context);
             return cs.GetCategory(id);
         }
 
@@ -30,8 +29,6 @@ namespace ToBuy.Controllers
         [HttpPost]
         public void Post([FromBody] CategoryDto value)
         {
-            ToBuyContext context = new ToBuyContext();
-            CategoryService cs = new CategoryService(context);
             cs.AddNewCategory(value);
         }
 

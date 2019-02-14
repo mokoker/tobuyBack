@@ -77,7 +77,12 @@ namespace ToBuy
             });
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Ssr}/{action=Index}/{id?}");
+            });
         }
     }
 }
