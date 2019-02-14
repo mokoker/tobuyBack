@@ -61,14 +61,19 @@ namespace ToBuy.Controllers
 
         [JwtAuth(Roles.User)]
         [HttpPost]
-        public void Post([FromBody] AdDto value)
+        public IActionResult Post([FromBody] AdDto value)
         {
+            if(value.CategoryId ==0)
+                return StatusCode(406, "kategori secmedin");
+            if(value.Title.Length < 3)
+                return StatusCode(406, "baslik 3 karakterden az olamaz");
             value.IpAddress = IpAddress;
             if (UserRole != Roles.Administrator)
             {
                 value.PosterId = UserId;
             }
-            service.AddNewAd(value);       
+            service.AddNewAd(value);
+            return Ok();
         }
 
         [JwtAuth(Roles.User)]
