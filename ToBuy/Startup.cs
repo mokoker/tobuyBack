@@ -22,9 +22,12 @@ namespace ToBuy
 {
     public class Startup
     {
+        private bool swaggerEnabled;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            swaggerEnabled = bool.Parse(Configuration["AppSettings:EnableSwagger"]);
+
         }
 
         public IConfiguration Configuration { get; }
@@ -32,13 +35,16 @@ namespace ToBuy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryCache(x=>x.SizeLimit =1024);
+        services.AddMemoryCache(x=>x.SizeLimit =1024);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc(config => config.ModelBinderProviders.Insert(0, new CsvModelBinderProvider()));
-            services.AddSwaggerGen(c =>
+            if (swaggerEnabled)
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            });
+                services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                });
+            }
             services.AddCors();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -66,15 +72,20 @@ namespace ToBuy
             builder.AllowAnyOrigin().AllowAnyMethod()
                    .AllowAnyHeader()
             );
-            app.UseSwagger();
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+            if (swaggerEnabled)
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
+                app.UseSwagger();
+            }
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+
+            if (swaggerEnabled)
+            {
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    c.RoutePrefix = string.Empty;
+                });
+            }
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc(routes =>
