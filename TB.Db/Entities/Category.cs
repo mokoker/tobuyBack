@@ -27,7 +27,6 @@ namespace TB.Db
                     childCats.Add(Id);
                 }
                 return childCats;
-
             }
         }
 

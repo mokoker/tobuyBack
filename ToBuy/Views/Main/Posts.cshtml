@@ -21,6 +21,15 @@
         <div>
             <a href="../../main/categories">Butun kategoriler icin tiklayin</a>
         </div>
+
+        @{ if (!String.IsNullOrEmpty(Model.CategoryName))
+            {
+                <div>
+                    @Model.CategoryName  kategorisi ilanlari.
+                </div>
+            }
+        }
+
         <div class="col-sm">
             @foreach (var post in Model.Data)
             {

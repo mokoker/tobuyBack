@@ -11,6 +11,7 @@ namespace TB.Db.Services
     public class AdService : BaseService
     {
         private static Dictionary<int, List<int>> lookup;
+        private static Dictionary<int, string> namer;
         private static object lockme = new object();
         public AdService(ToBuyContext context) : base(context)
         {
@@ -23,8 +24,22 @@ namespace TB.Db.Services
                         CategoryService service = new CategoryService(context);
                         Category cat = context.Categories.ToList().First(x => x.Id == 1);
                         lookup = new Dictionary<int, List<int>>();
+                        namer = new Dictionary<int, string>();
+                        FillNamer(cat);
                         FillDict(cat);
                     }
+                }
+            }
+        }
+
+        private void FillNamer(Category cat)
+        {
+            namer.Add(cat.Id, cat.Name);
+            if (cat.Childs != null)
+            {
+                foreach (Category c in cat.Childs)
+                {
+                    FillNamer(c);
                 }
             }
         }
@@ -41,9 +56,18 @@ namespace TB.Db.Services
             }
         }
 
+        public static Dictionary<int,string> Namer
+        {
+            get { return namer; }
+        }
+
         public AdDto GetAd(int id)
         {
-            return context.Ads.Include(y => y.Poster).SingleOrDefault(x => x.Id == id).GetDto();
+            var t = context.Ads.Include(y => y.Poster).SingleOrDefault(x => x.Id == id);
+            if (t != null)
+                return t.GetDto();
+            else
+                return null;
         }
         public void AddNewAd(AdDto dto)
         {
@@ -73,11 +97,13 @@ namespace TB.Db.Services
             }
 
             SearchAdResultDto result = new SearchAdResultDto(dto);
+ 
             List<AdDto> ads = new List<AdDto>();
             IQueryable<Ad> adEnts = context.Ads.Where(k => k.State == PostState.Active);
 
             if (dto.CategoryId != 0)
             {
+                result.CategoryName = Namer[dto.CategoryId];
                 List<int> looky;
                 lookup.TryGetValue(dto.CategoryId, out looky);
                 adEnts = adEnts.Where(j => looky.Contains(j.CategoryId));
@@ -99,7 +125,7 @@ namespace TB.Db.Services
                 }
             }
             result.Last_page = (adEnts.Count() + dto.Per_page - 1) / dto.Per_page;
-            var x = adEnts.OrderByDescending(j => j.PostDate).Skip((dto.Page - 1) * dto.Per_page).Take(dto.Per_page).Include(y => y.Poster).Include(z => z.Category);
+            var x = adEnts.OrderByDescending(j => j.PostDate).Skip((dto.Page - 1) * dto.Per_page).Take(dto.Per_page).Include(y => y.Poster);
             foreach (var y in x)
             {
                 ads.Add(y.GetDto());

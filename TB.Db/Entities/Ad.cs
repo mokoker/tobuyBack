@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using TB.Db.Services;
 using ToBuy.Common.DTOs;
 using ToBuy.Common.Enums;
 
@@ -36,9 +37,9 @@ namespace TB.Db.Entities
             {
                 dto.PosterName = Poster.UserName;
             }
-            if (Category != null)
+            if (CategoryId != 0)
             {
-                dto.CategoryName = Category.Name;
+                dto.CategoryName = AdService.Namer[CategoryId];
             }
             dto.PosterId = PosterId;
             dto.Id = Id;
