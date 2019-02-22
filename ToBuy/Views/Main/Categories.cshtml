@@ -9,41 +9,48 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Test</title>
+    <title>Kategoriler</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <a href="https://karasayfa.com">Tam surumu icin tiklayin</a>
-        @if(@Context.Request.Path=="/main")
-        {
-            baseUrl = "/main/category";
-        }
-        else
-        {
-            baseUrl = "category";
-        }
-        @foreach (var cat in Model.Children)
-        {
-            <li><a href="@baseUrl/@cat.Id"> @cat.Name</a></li>
-            @foreach (var cat2 in cat.Children)
+    <div class="container-fluid">
+        <a href="https://karasayfa.com">Tam surumu icin tiklayin</a>
+        <ul>
+            @if (@Context.Request.Path == "/main")
             {
-                <li>&nbsp; <a href="@baseUrl/@cat2.Id"> @cat2.Name</a></li>
-                if (cat2.Children != null)
-                {
-                    @foreach (var cat3 in cat2.Children)
-                    {
-                        <li>&nbsp; &nbsp; <a href="@baseUrl/@cat3.Id"> @cat3.Name</a></li>
-                        if (cat3.Children != null)
-                        {
-                            @foreach (var cat4 in cat3.Children)
-                            {
-                                <li>&nbsp; &nbsp;&nbsp; <a href="@baseUrl/@cat4.Id"> @cat4.Name</a></li>
+                baseUrl = "/main/category";
+            }
+            else
+            {
+                baseUrl = "category";
+            }
 
+            @foreach (var cat in Model.Children)
+            {
+                <li><a href="@baseUrl/@cat.Id"> @cat.Name</a></li>
+                @foreach (var cat2 in cat.Children)
+                {
+                    <li>&nbsp; <a href="@baseUrl/@cat2.Id"> @cat2.Name</a></li>
+                    if (cat2.Children != null)
+                    {
+                        @foreach (var cat3 in cat2.Children)
+                        {
+                            <li>&nbsp; &nbsp; <a href="@baseUrl/@cat3.Id"> @cat3.Name</a></li>
+                            if (cat3.Children != null)
+                            {
+                                @foreach (var cat4 in cat3.Children)
+                                {
+                                    <li>&nbsp; &nbsp;&nbsp; <a href="@baseUrl/@cat4.Id"> @cat4.Name</a></li>
+
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-    </ul>
+        </ul>
+    </div>>
 </body>
 </html>

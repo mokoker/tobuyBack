@@ -9,14 +9,24 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Posts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <a href="https://karasayfa.com/#/?s=categoryId-@Model.CategoryId">Tam surumu icin tiklayin</a>
-    <ul>
-        @foreach (var post in Model.Data)
-        {
-            <li><a href="../post/@post.Id">@post.Title</a> </li>
-        }
-    </ul>
+    <div class="container-fluid">
+        <div>
+            <a href="https://karasayfa.com/#/?s=categoryId-@Model.CategoryId">Tam surumu icin tiklayin</a>
+        </div>
+        <div>
+            <a href="./categories">Butun kategoriler icin tiklayin</a>
+        </div>
+        <div class="col-sm">
+            @foreach (var post in Model.Data)
+            {
+                <li><a href="./post/@post.Id">@post.Title</a> </li>
+            }
+        </div>
+    </div>
 </body>
 </html>

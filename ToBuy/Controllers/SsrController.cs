@@ -18,6 +18,11 @@ namespace ToBuy
         }
         public IActionResult Index()
         {
+            var dto = ass.SearchAd(new SearchAdDto {Per_page = 1000 });
+            return View("Posts", dto);
+        }
+        public IActionResult Categories()
+        {
             var dto = cs.GetCategory(1);
             return View("Categories", dto);
         }
