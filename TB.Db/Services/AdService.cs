@@ -56,7 +56,7 @@ namespace TB.Db.Services
             }
         }
 
-        public static Dictionary<int,string> Namer
+        public static Dictionary<int, string> Namer
         {
             get { return namer; }
         }
@@ -65,9 +65,13 @@ namespace TB.Db.Services
         {
             var t = context.Ads.Include(y => y.Poster).SingleOrDefault(x => x.Id == id);
             if (t != null)
+            {
                 return t.GetDto();
+            }
             else
+            {
                 return null;
+            }
         }
         public void AddNewAd(AdDto dto)
         {
@@ -97,7 +101,7 @@ namespace TB.Db.Services
             }
 
             SearchAdResultDto result = new SearchAdResultDto(dto);
- 
+
             List<AdDto> ads = new List<AdDto>();
             IQueryable<Ad> adEnts = context.Ads.Where(k => k.State == PostState.Active);
 
@@ -118,7 +122,11 @@ namespace TB.Db.Services
             }
             else
             {
-                adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
+                if (!dto.GetAll)
+                {
+                    adEnts = adEnts.Where(z => z.ToSell == dto.ToSell);
+                }
+
                 if (dto.Cities != null && dto.Cities.Count > 0)
                 {
                     adEnts = adEnts.Where(p => dto.Cities.Contains(p.City));

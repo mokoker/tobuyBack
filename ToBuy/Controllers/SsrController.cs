@@ -57,7 +57,7 @@ namespace ToBuy
         }
         public IActionResult Index()
         {
-            var dto = ass.SearchAd(new SearchAdDto { Per_page = 1000 });
+            var dto = ass.SearchAd(new SearchAdDto { Per_page = 1000 ,GetAll = true});
             return View("Posts", dto);
         }
         public IActionResult Categories()
@@ -67,16 +67,16 @@ namespace ToBuy
         }
         public IActionResult Category(int id)
         {
-            var dto = ass.SearchAd(new SearchAdDto { CategoryId = id, Per_page = 1000 });
+            var dto = ass.SearchAd(new SearchAdDto { CategoryId = id, Per_page = 1000 ,GetAll = true});
             return View("Posts", dto);
         }
         public IActionResult Post(int id)
         {
             var dto = ass.GetAd(id);
             if (dto == null)
-                return View("Post", dto);
-            else
                 return NotFound("post not found");
+            else
+                return View("Post", dto); 
         }
     }
 }

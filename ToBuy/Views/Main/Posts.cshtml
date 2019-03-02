@@ -33,9 +33,18 @@
         <div class="col-sm">
             @foreach (var post in Model.Data)
             {
-                <li><a href="../../main/post/@post.Id">@post.Title</a> </li>
+                <li><a href="../../main/post/@post.Id"> @(post.ToSell ? "Satilik " : "Alinik ")  @post.Title</a> </li>
             }
         </div>
     </div>
 </body>
 </html>
+
+<style>
+    div {
+        margin: 10px;
+    }
+    li{
+        margin:5px;
+    }
+</style>

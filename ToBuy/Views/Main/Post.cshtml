@@ -1,6 +1,7 @@
 ﻿@model ToBuy.Common.DTOs.AdDto;
 @{
     Layout = null;
+    var joined = String.Join(',', Model.Title.Split(' ',StringSplitOptions.RemoveEmptyEntries));
 }
 
 <!DOCTYPE html>
@@ -8,6 +9,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <meta name="keywords" content="@joined">
     <title> @Model.Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,12 +19,19 @@
     <div class="container-fluid">
         <a href="https://karasayfa.com/#/d?id=@Model.Id">Tam surumu icin tiklayin</a>
         <div>      <a href="../../main/category/@Model.CategoryId">Kategoriye donmek icin tiklayin</a></div>
-        <div>Baslik : @Model.Title</div>
-        <div>Mesaj : @Model.Message</div>
-        <div>Gonderim Zamani : @Model.PostDate</div>
-        <div>Fiyat : @Model.Price</div>
-        <div>Gonderen : @Model.PosterName</div>
-        <div>Sehir : @Model.CityName</div>
-    </div>
+        <div>
+            Baslik : @(Model.ToSell ? "Satilik " : "Alinik ") @Model.Title</div>
+            <div>Mesaj : @Model.Message</div>
+            <div>Gonderim Zamani : @Model.PostDate</div>
+            <div>Fiyat : @Model.Price</div>
+            <div>Gonderen : @Model.PosterName</div>
+            <div>Sehir : @Model.CityName</div>
+        </div>
 </body>
 </html>
+
+<style>
+    div {
+        margin: 10px;
+    }
+</style>
