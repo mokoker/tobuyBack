@@ -118,7 +118,8 @@ namespace TB.Db.Services
             }
             else if (!string.IsNullOrEmpty(dto.Filter))
             {
-                adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish", dto.Filter)));
+                string query = String.Join(" | ", dto.Filter.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                adEnts = adEnts.Where(p => p.SearchVector.Matches(EF.Functions.ToTsQuery("turkish", query)));
             }
             else
             {
